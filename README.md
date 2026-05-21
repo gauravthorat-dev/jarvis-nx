@@ -51,6 +51,20 @@ pytest -q
 docker compose up --build
 ```
 
+## Tech Stack
+
+- Python
+- AsyncIO
+- WebSockets
+- Ollama
+- SQLite
+- Docker
+- Pytest
+- Ruff
+- Mypy
+- HTML/CSS/JavaScript
+- GitHub Actions
+
 ## Recruiter Demo Flow (5 Minutes)
 1. Start Jarvis and open dashboard.
 2. Show live telemetry cards updating.
