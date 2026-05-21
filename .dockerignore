@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+logs/
+data/memory.db

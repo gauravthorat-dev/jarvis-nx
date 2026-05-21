@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  jarvis:
+    build: .
+    container_name: jarvis-nx
+    ports:
+      - "8765:8765"
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped

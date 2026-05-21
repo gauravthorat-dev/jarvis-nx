@@ -1,0 +1,30 @@
+# Core assistant
+websockets>=12.0
+python-dotenv>=1.0.1
+psutil>=5.9.8
+requests>=2.32.3
+
+# Voice
+SpeechRecognition>=3.10.4
+PyAudio>=0.2.14
+pyttsx3>=2.98
+
+# AI/LLM
+wikipedia>=1.4.0
+feedparser>=6.0.11
+
+# Existing automations
+pywhatkit>=5.4
+pyautogui>=0.9.54
+pygame>=2.6.1
+edge-tts>=7.2.0
+ddgs>=9.0.0
+pygetwindow>=0.0.9
+
+# Testing
+pytest>=8.3.2
+
+ruff>=0.6.8
+mypy>=1.11.2
+
+pytest-asyncio>=0.24.0

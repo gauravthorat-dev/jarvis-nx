@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Database
+*.db
+
+# Cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+
+# Node
+node_modules/
+
+# Large/private files
+test.mp3
+interaction_log.json
+
+# Old UI files
+jarvis_siri.html
+jarvis_ui.html
+ws_snippet.js
+
+# Models/data
+models/
+data/
+
+# Secrets
+.env
+
+logs/
+
+jarvis-voice-assistant-/

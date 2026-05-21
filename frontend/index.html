@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jarvis AI Network Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#05060d;--glass:#0f1a2dbb;--line:#52f5ff44;--txt:#e9f7ff;--muted:#8aa4be;--ok:#2cffb3;--warn:#ffcc4d;--bad:#ff5c7a}
+*{box-sizing:border-box}body{margin:0;color:var(--txt);font-family:Rajdhani,sans-serif;background:radial-gradient(circle at 10% 15%,#1a2b60 0,#05060d 42%),linear-gradient(130deg,#070b15,#101a2f)}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{padding:22px;border-right:1px solid var(--line);background:#081225aa;backdrop-filter:blur(10px)}
+.logo{font:600 20px Orbitron,sans-serif;letter-spacing:2px;color:#52f5ff}.nav{margin-top:20px;display:grid;gap:10px}.nav a{padding:10px 12px;border:1px solid var(--line);border-radius:10px;color:var(--txt);text-decoration:none}
+.main{padding:16px;display:grid;gap:14px}
+.top{display:grid;grid-template-columns:340px 1fr;gap:14px}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:14px;backdrop-filter:blur(12px)}
+.orb{width:110px;height:110px;border-radius:50%;margin:8px auto;background:conic-gradient(#52f5ff,#2cffb3,#4c7dff,#52f5ff);animation:spin 6s linear infinite;box-shadow:0 0 36px #52f5ff66}
+.orb.listen{animation:spin 1.2s linear infinite,pulse .8s infinite}.orb.think{animation:spin .7s linear infinite,pulse 1.5s infinite}.orb.speak{animation:spin 2s linear infinite,pulse .45s infinite}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.1)}}
+.state{text-align:center;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}.kpi{border:1px solid var(--line);border-radius:12px;padding:8px}.kpi b{display:block;color:#52f5ff}
+.mid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.chat{height:380px;overflow:auto;display:flex;flex-direction:column;gap:8px}.msg{max-width:85%;padding:10px 12px;border-radius:12px}.u{align-self:flex-end;background:#3f67ff4a;border:1px solid #4c7dff}.a{align-self:flex-start;background:#0e243f;border:1px solid #52f5ff55}
+.typing{display:none;color:var(--muted)}.typing.show{display:block}
+.input{display:flex;gap:8px;margin-top:8px}input{flex:1;background:#0a162b;border:1px solid var(--line);border-radius:999px;color:var(--txt);padding:10px 12px}button{border:none;border-radius:999px;padding:10px 14px;background:linear-gradient(120deg,#52f5ff,#2cffb3);font-weight:700}
+.list{height:180px;overflow:auto;font-size:14px;color:var(--muted)}
+.badge{padding:2px 7px;border-radius:999px;font-size:12px}.ok{background:#2cffb31f;color:var(--ok)}.warn{background:#ffcc4d1f;color:var(--warn)}.bad{background:#ff5c7a1f;color:var(--bad)}
+.footer{font-size:12px;color:var(--muted)}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.sidebar{display:none}.top,.mid{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(120px,1fr))}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="logo">JARVIS NX</div>
+    <div class="nav">
+      <a href="#assistant">Assistant</a>
+      <a href="#network">Network</a>
+      <a href="#system">System</a>
+      <a href="#security">Security</a>
+    </div>
+    <p class="footer">Educational security features only.</p>
+  </aside>
+  <main class="main">
+    <section class="top">
+      <div class="card" id="assistant">
+        <div class="state" id="state">Standby</div>
+        <div class="orb" id="orb"></div>
+        <div class="state">WebSocket: <span id="ws">connecting...</span></div>
+      </div>
+      <div class="card" id="network">
+        <h3>Realtime Networking Dashboard</h3>
+        <div class="grid">
+          <div class="kpi"><b>Public IP</b><span id="pubIp">-</span></div>
+          <div class="kpi"><b>Private IP</b><span id="pvtIp">-</span></div>
+          <div class="kpi"><b>Latency</b><span id="latency">-</span></div>
+          <div class="kpi"><b>Quality</b><span id="quality">-</span></div>
+          <div class="kpi"><b>Gateway</b><span id="gateway">-</span></div>
+          <div class="kpi"><b>DNS</b><span id="dns">-</span></div>
+          <div class="kpi"><b>Wi-Fi</b><span id="wifi">-</span></div>
+          <div class="kpi"><b>Adapters</b><span id="adapters">-</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mid">
+      <div class="card">
+        <h3>Assistant Chat</h3>
+        <div id="chat" class="chat"></div>
+        <div id="typing" class="typing">Jarvis is thinking...</div>
+        <div class="input">
+          <input id="txt" placeholder="Ask Jarvis... (e.g., system status and wifi status)" />
+          <button id="send">Send</button>
+        </div>
+      </div>
+      <div class="card" id="system">
+        <h3>System Telemetry</h3>
+        <div class="grid">
+          <div class="kpi"><b>CPU</b><span id="cpu">-</span></div>
+          <div class="kpi"><b>RAM</b><span id="ram">-</span></div>
+          <div class="kpi"><b>Disk</b><span id="disk">-</span></div>
+          <div class="kpi"><b>Battery</b><span id="battery">-</span></div>
+          <div class="kpi"><b>Net Sent</b><span id="sent">-</span></div>
+          <div class="kpi"><b>Net Recv</b><span id="recv">-</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="security">
+      <h3>Cybersecurity Monitor <span class="badge warn">Ethical / Local Only</span></h3>
+      <div class="grid">
+        <div class="kpi"><b>Firewall</b><span id="firewall">-</span></div>
+        <div class="kpi"><b>Open Ports</b><span id="ports">-</span></div>
+        <div class="kpi"><b>Suspicious Processes</b><span id="sus">-</span></div>
+      </div>
+      <h4>Security Tips</h4>
+      <div id="tips" class="list"></div>
+      <h4>Scan Output</h4>
+      <div id="scanlog" class="list"></div>
+    </section>
+  </main>
+</div>
+<script>
+const stateEl=document.getElementById('state'),orb=document.getElementById('orb'),typing=document.getElementById('typing'),chat=document.getElementById('chat'),wsEl=document.getElementById('ws');
+const el=id=>document.getElementById(id); let ws;
+function add(role,text){const d=document.createElement('div');d.className='msg '+(role==='user'?'u':'a');d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight;}
+function setState(s){stateEl.textContent=s;orb.className='orb '+(s==='listen'?'listen':s==='think'?'think':s==='speak'?'speak':'');typing.className=s==='think'?'typing show':'typing';}
+function qBadge(q){return q==='excellent'?'ok':q==='good'?'warn':'bad';}
+function updateTelemetry(m){const s=m.system||{},n=m.network||{};el('cpu').textContent=(s.cpu_percent??'-')+'%';el('ram').textContent=(s.memory_percent??'-')+'%';el('disk').textContent=(s.disk_percent??'-')+'%';el('battery').textContent=(s.battery_percent??'n/a')+'%';el('pubIp').textContent=n.public_ip||'-';el('pvtIp').textContent=n.private_ip||'-';el('latency').textContent=(n.latency_ms??'-')+' ms';el('quality').innerHTML=`<span class="badge ${qBadge(n.quality)}">${n.quality||'-'}</span>`;el('gateway').textContent=n.gateway||'-';el('dns').textContent=(n.dns||[]).join(', ');el('wifi').textContent=(n.wifi&&n.wifi.ssid?`${n.wifi.ssid} (${n.wifi.signal})`:'-');el('adapters').textContent=(n.adapters||[]).join(', ');if(n.usage){el('sent').textContent=(n.usage.bytes_sent_mb??'-')+' MB';el('recv').textContent=(n.usage.bytes_recv_mb??'-')+' MB';}}
+function updateSecurity(m){const d=m.data||{};el('firewall').textContent=d.firewall||'-';el('ports').textContent=(d.open_ports||[]).slice(0,10).join(', ')||'none';el('sus').textContent=(d.suspicious_processes||[]).length;el('tips').innerHTML=(d.tips||[]).map(x=>`<div>- ${x}</div>`).join('');}
+function connect(){const token=localStorage.getItem('jarvis_ws_token')||'';const url=token?`ws://127.0.0.1:8765?token=${encodeURIComponent(token)}`:'ws://127.0.0.1:8765';ws=new WebSocket(url);ws.onopen=()=>{wsEl.textContent='online';setState('standby')};ws.onclose=()=>{wsEl.textContent='offline';setTimeout(connect,2000)};ws.onerror=()=>ws.close();ws.onmessage=e=>{try{const m=JSON.parse(e.data);if(m.type==='state')setState(m.state);if(m.type==='user')add('user',m.text);if(m.type==='jarvis')add('jarvis',m.text);if(m.type==='telemetry')updateTelemetry(m);if(m.type==='security')updateSecurity(m);if(m.type==='security_scan_result'){el('scanlog').textContent=m.text||'';}if(m.type==='error')add('jarvis',m.text);if(m.type==='hint')add('jarvis',m.text);if(m.type==='voice_error')add('jarvis','Mic issue: '+m.text);}catch{}}}
+function send(){const inp=el('txt');const v=inp.value.trim();if(!v)return;inp.value='';add('user',v);if(ws&&ws.readyState===1){ws.send(JSON.stringify({type:'user_text',text:v}));setState('think')}}
+el('send').onclick=send;el('txt').addEventListener('keydown',e=>{if(e.key==='Enter')send()});connect();
+</script>
+</body>
+</html>
