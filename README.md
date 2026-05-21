@@ -256,6 +256,10 @@ Cybersecurity-related functionality is intentionally restricted to safe local us
 
 ---
 
+## Why This Project?
+
+Jarvis NX was built to explore production-minded AI system engineering using realtime async architecture, networking telemetry, ethical cybersecurity concepts, and modular scalable backend design.
+
 # License
 
 MIT License
